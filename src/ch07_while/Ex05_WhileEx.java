@@ -23,7 +23,6 @@ public class Ex05_WhileEx {
             int num1 = scanner.nextInt();
 
             if (num1 == i) {
-                sum += 1;
                 System.out.println("정답입니다");
                 System.out.println("당신은 " + sum + "번 시도 했습니다.");
                 run = false;
@@ -32,7 +31,7 @@ public class Ex05_WhileEx {
                 System.out.println("더 높은 숫자를 입력 해주세요");
                 sum += 1;
 
-            }else if (num1 > i) {
+            }else {
                 System.out.println("더 작은 숫자를 입력 해주세요");
                 sum += 1;
 
