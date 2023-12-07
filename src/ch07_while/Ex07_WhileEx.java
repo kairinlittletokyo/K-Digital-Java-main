@@ -17,7 +17,7 @@ public class Ex07_WhileEx {
         boolean run = true;
         while (run) {
             sum += num;
-           22   num = s * count;
+             num = s * count;
                 s = -s; // 1, -1, 1, -1
                 count++;
             }
@@ -25,5 +25,5 @@ public class Ex07_WhileEx {
         }
 
     }
-}
+
 
