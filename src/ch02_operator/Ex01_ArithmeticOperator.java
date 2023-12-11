@@ -11,7 +11,7 @@ public class Ex01_ArithmeticOperator {
 		 * System.out.println(num1 + num2)
 		 */
 		int num1 = 10, num2 = 5;
-		System.out.println("num1 + num2 = " + num1 + num2); // 문자열로 인식
+		System.out.println("num1 + num2 = " + num1 + num2); // 문자열로 인식 ("10" + "5") = 105
 		System.out.println("num1 + num2 = " + (num1 + num2)); // 정수 먼저 계산
 		System.out.println("num1 - num2 = " + (num1 - num2));
 		System.out.println("num1 * num2 = " + (num1 * num2));
@@ -20,7 +20,8 @@ public class Ex01_ArithmeticOperator {
 		
 		// 계산 결과 변수 선언
 		System.out.println("---계산 결과 변수 선언---");
-		int result = num1 + num2;
+		int result = 0;
+		result = num1 + num2;
 		System.out.println(result);
 		result = num1 - num2;
 		System.out.println(result);

@@ -3,7 +3,7 @@ package ch02_operator;
 public class Ex04_LogicalOperator {
 
 	public static void main(String[] args) {
-		// 논리연산잔
+		// 논리연산자
 		System.out.println(true && true);
 		System.out.println(true && false);
 		System.out.println(true || true); // Dead code

@@ -2,12 +2,13 @@ package ch02_operator;
 
 public class Ex02_ComparisonOperator {
 	
+	//비교 연산자의 결과는 true // false 로 나온다.
 	public static void main(String[] args) {
 		System.out.println(10 > 5);
 		System.out.println(10 < 5);
-		boolean result = 77 >= 60;
+		boolean result = 77 <= 60;
 		System.out.println(result);
-		result = ( 8 == 100);
+		result = (8 == 100);
 		System.out.println(result);
 		result = false;
 		boolean bool1 = true;

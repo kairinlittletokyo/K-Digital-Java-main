@@ -12,8 +12,10 @@ public class Ex02_ArrayBasic {
         System.out.println("numbers1[4] = " + numbers1[4]);
 
         //배열의 반복문
+        // --이 아래가 거의 공식임 + 무조건 0부터, 그리고 그 배열 크기보다 작을 때까지)
 //        for (int i = 0; i < numbers1.length; i++) {
 //            System.out.println("numbers1 = " + numbers1[i]);
+
         //내가 한 거 for(int numbers1 = 0; numbers1 > 10; numbers1++){
 
 
