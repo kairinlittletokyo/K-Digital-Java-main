@@ -60,11 +60,18 @@ public class BoardMain {
                 } else {
                     System.out.println("존재 하지 않는 글입니다.");
 
+
                 }
-                if (selectNo == 3) {
-                    run = false;
-                }
+            }
+
+
+            if (selectNo == 3) {
+                System.out.println("프로그램을 종료 합니다.");
+                run = false;
             }
         }
     }
 }
+
+
+
