@@ -1,6 +1,9 @@
 package ch10_class.ex9;
 
 public class Student {
+
+
+    // 필드, getter / setter 기본생성자, 매개변수생성자, toString
     /*
     필드
     이름 (studentName)
@@ -8,7 +11,23 @@ public class Student {
     학과 (studentMajor)
     전화번호 (studentMobile)
      각 필드의 getter/setter 메서드
+
+     method name : toString
+     return type: String
+     parameter : x
+
        */
+
+//    @Override
+//    public String toString() {
+//        return "Student{" +
+//                "studentName=" + st
+//                "studentNumber=" +
+//                "studentMajor=" +
+//                "studentMobile=" +
+//                "}";
+//    }
+
     private String studentName;
     private String studentNumber;
     private String studentMajor;
@@ -40,30 +59,30 @@ public class Student {
         this.studentNumber = studentNumber;
     }
 
+    public Student(String studentNumber) {
+        this.studentNumber = studentNumber;
+    }
+
+    //getter / setter -------------------
+
     // studentNumber getter ------
     public String getstudentNumber() {
-        return studentNumber;
-    }
-
+        return studentNumber;}
     // studentMajor setter ------
     public void setstudentMajor(String studentMajor) {
-        this.studentMajor = studentMajor;
-    }
-
+        this.studentMajor = studentMajor;}
     // studentMajor getter ------
     public String getstudentMajor() {
-        return studentMajor;
-    }
-
+        return studentMajor;}
     // studentMobile setter ------
     public void setstudentMobile(String studentMobile) {
-        this.studentMobile = studentMobile;
-    }
-
+        this.studentMobile = studentMobile;}
     // studentMobile getter ------
     public String getstudentMobile() {
-        return studentMobile;
-    }
+        return studentMobile;}
+
+
+
     //필드에 저장된 값을 출력하는 print() 문 ------
     public void print(){
         System.out.println("이름 : " + studentName);

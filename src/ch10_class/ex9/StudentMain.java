@@ -18,5 +18,8 @@ public class StudentMain {
         Student student2 = new Student("김서귀포", "감귤포장학과", "010 5555 5555", "21학번");
         student2.print();
 
+        System.out.println("student1 = " + student1);
+        System.out.println("student2 = " + student2);
+
     }
 }
