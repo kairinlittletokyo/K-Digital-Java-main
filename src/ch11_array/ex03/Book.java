@@ -24,14 +24,15 @@ public class Book {
     private int bookPrice;
     private String bookPublisher;
 
+    private static Long idValue = 1L;
 
     public Book(){
-
+        this.id = idValue++;
 
     }
 
-    public Book(Long id, String bookTitle, String bookAuthor, int bookPrice, String bookPublisher){
-        this.id = id;
+    public Book(String bookTitle, String bookAuthor, int bookPrice, String bookPublisher){
+        this.id = idValue++;
         this.bookAuthor = bookAuthor;
         this.bookTitle = bookTitle;
         this.bookPrice = bookPrice;
