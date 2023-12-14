@@ -1,4 +1,4 @@
-package ch11_array.ex1;
+package ch11_array.ex01;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,6 @@ public class Studentmain {
             //학생의 이름만 따로 출력
             System.out.println("studentList = " + studentList.get(i).getStudentName());
             //for each
-
             for(Student stu: studentList) {
                 System.out.println("stu = " + stu);
                 System.out.println("stu = " + stu.getStudentName());
