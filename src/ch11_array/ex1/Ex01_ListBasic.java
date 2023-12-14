@@ -1,4 +1,4 @@
-package ch11_array;
+package ch11_array.ex1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,9 +58,9 @@ public class Ex01_ListBasic {
             for (String bb: strList) {
                 System.out.println("bb = " + bb);
 
-                strList.forEach(bb -> {
-                    System.out.println("bb = " + bb);
-                });
+//                strList.forEach( -> {
+//                    System.out.println("bb = " + bb);
+//                });
             }
         }
     }
