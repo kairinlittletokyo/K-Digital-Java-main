@@ -1,42 +1,38 @@
-package ch11_classes.ex02;
+package ch11_classes.ex03_member;
 
 import java.util.Scanner;
 
-public class BookMain {
+public class MemberMain {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         boolean run = true;
         int selectNo = 0;
-        // bookService 클래스 객체 선언
-        BookService bookService = new BookService();
+        MemberService memberService = new MemberService();
 
         while (run) {
             System.out.println("-----------------------------------------------------------------------------------------");
-            System.out.println("1.도서등록 | 2.도서목록 | 3.도서조회(id) | 4.도서조회(제목) | 5.가격수정 | 6.도서삭제 | 7.도서검색 | 0.종료");
+            System.out.println("        1.회원가입 | 2.로그인 | 3.목록조회 | 4.정보수정 | 5.탈퇴 | 6.로그아웃 | 0.종료");
             System.out.println("-----------------------------------------------------------------------------------------");
             System.out.print("선택> ");
             selectNo = scan.nextInt();
             if (selectNo == 1) {
                 // 호출하는 문장 작성
-                bookService.save();
+                memberService.save();
             } else if (selectNo == 2) {
                 // 호출하는 문장 작성
-                bookService.findAll();
+                memberService.login();
             } else if (selectNo == 3) {
                 // 호출하는 문장 작성
-                bookService.findById();
+                memberService.findAll();
             } else if (selectNo == 4) {
                 // 호출하는 문장 작성
-                bookService.findByTitle();
+                memberService.update();
             } else if (selectNo == 5) {
                 // 호출하는 문장 작성
-                bookService.update();
+                memberService.delete();
             } else if (selectNo == 6) {
                 // 호출하는 문장 작성
-                bookService.delete();
-            } else if (selectNo == 7) {
-                // 호출하는 문장 작성
-                bookService.search();
+                memberService.logout();
             } else if (selectNo == 0) {
                 run = false;
             }
