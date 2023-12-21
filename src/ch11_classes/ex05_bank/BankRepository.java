@@ -2,29 +2,16 @@ package ch11_classes.ex05_bank;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class BankRepository {
-    private List<ClientDTO> clientList = new ArrayList<>();
-    private List<AccountDTO> bankingList = new ArrayList<>();
+    private static List<ClientDTO> clientDTOList = new ArrayList<>();
+    private static List<AccountDTO> accountDTOList = new ArrayList<>();
 
-    public boolean save(ClientDTO clientDTO) {
-        return clientList.add(clientDTO);
-    }
 
-    // 계좌번호 중복 체크
-    public boolean NumberDuplicate(String accountNumber) {
-        for (ClientDTO client : clientList) {
-            if (accountNumber.equals(client.getAccountNumber())) {
-                return true; // 중복된 계좌번호가 있으면 true 반환
-            }
-        }
-        return false; // 중복된 계좌번호가 없으면 false 반환
-    }
+    //DTO가 두개이기 때문에 리스트 2개
 
-    public ClientDTO searchAccountNumber(String accountNumber) {
-        for (ClientDTO clientDTO : clientList) {
+    public ClientDTO accountCheck(String accountNumber) {
+        for (ClientDTO clientDTO : clientDTOList) {
             if (accountNumber.equals(clientDTO.getAccountNumber())) {
                 return clientDTO;
             }
@@ -32,59 +19,81 @@ public class BankRepository {
         return null;
     }
 
-    public void bankHistory(AccountDTO accountDTO) {
-        bankingList.add(accountDTO);
+    // 어카운트 체크 입력 받은 계좌를 for문으로 계속 돌리면서
+    // 일치하면 ClientDTO 리턴
+    // 없으면 null 리턴
 
+
+    public boolean save(ClientDTO clientDTO) {
+        return clientDTOList.add(clientDTO);
     }
 
-    public boolean withdraw(String accountNumber, String clientPass, long withdrawAmount) {
-        ClientDTO clientDTO = searchAccountNumber(accountNumber);
+    public ClientDTO checkBalance(String accountNumber) {
+        for (ClientDTO clientDTO : clientDTOList) {
+            if (accountNumber.equals(clientDTO.getAccountNumber())) {
+                return clientDTO;
+            }
+        }
+        return null;
+    }
 
-        if (clientDTO != null && clientDTO.getClientPass().equals(clientPass) && clientDTO.getBalance() >= withdrawAmount) {
-            clientDTO.setBalance(clientDTO.getBalance() - withdrawAmount);
-            // 출금 내역 기록
-            AccountDTO withdrawDTO = new AccountDTO(accountNumber, 0, withdrawAmount, BankUtil.getCurrentDate());
-            bankingList.add(withdrawDTO);
-            return true;
+    public boolean deposit(String accountNumber, long money) {
+        for (ClientDTO clientDTO : clientDTOList) {
+            if (accountNumber.equals(clientDTO.getAccountNumber())) {
+                //일치하는 계좌 찾는 if 문
+                long balance = clientDTO.getBalance(); // 기존 잔액 값 가져오기
+                balance = balance + money; // 기존 잔액 + 입금액 => 잔액
+                clientDTO.setBalance(balance); // 해당 고객의 잔액값으로 저장(set)
+                AccountDTO accountDTO = new AccountDTO(accountNumber, money, 0);
+                accountDTOList.add(accountDTO);
+                return true;
+            }
         }
         return false;
-
     }
-    public List<AccountDTO> getAllHistory(String accountNumber) {
-        List<AccountDTO> result = new ArrayList<>();
-        for (AccountDTO history : bankingList) {
-            if (history.getAccountNumber().equals(accountNumber)) {
-                result.add(history);
+
+    public boolean withdraw(String accountNumber, long money) {
+        for (ClientDTO clientDTO : clientDTOList) { //계좌 찾기
+            if (accountNumber.equals(clientDTO.getAccountNumber())) { //계좌 찾기
+                long balance = clientDTO.getBalance(); //현재 잔액 값 가져오기
+                if (money > balance) {
+                    return false;
+                }
+                balance = balance - money;
+                clientDTO.setBalance(balance); //잔액값 저장
+                AccountDTO accountDTO = new AccountDTO(accountNumber, 0, money); //입금액이 0
+                accountDTOList.add(accountDTO);
+                return true;
             }
         }
-        return result;
+        return false;
     }
 
-    public List<AccountDTO> getDepositHistory(String accountNumber) {
-        List<AccountDTO> result = new ArrayList<>();
-        for (AccountDTO history : bankingList) {
-            if (history.getAccountNumber().equals(accountNumber) && history.getDeposit() > 0) {
-                result.add(history);
+    public List<AccountDTO> bankingList(String accountNumber) {
+        List<AccountDTO> bankingList = new ArrayList<>();
+        for (AccountDTO accountDTO : accountDTOList) {
+            if (accountNumber.equals(accountDTO.getAccountNumber())) {
+                bankingList.add(accountDTO);
             }
         }
-        return result;
+        return bankingList;
     }
 
-    public List<AccountDTO> getWithdrawHistory(String accountNumber) {
-        List<AccountDTO> result = new ArrayList<>();
-        for (AccountDTO history : bankingList) {
-            if (history.getAccountNumber().equals(accountNumber) && history.getWithdraw() > 0) {
-                result.add(history);
+    public void transfer(String accountNumberFrom, String accountNumberTo, long money) {
+        for (int i = 0; i < clientDTOList.size(); i++) {
+            if (accountNumberFrom.equals(clientDTOList.get(i).getAccountNumber())) { // 보내는 사람 잔액, 거래 내역 처리
+                long balance = clientDTOList.get(i).getBalance();
+                balance = balance - money;
+                clientDTOList.get(i).setBalance(balance);
+                AccountDTO accountDTO = new AccountDTO(accountNumberFrom, 0, money);
+                accountDTOList.add(accountDTO);
+            } else if (accountNumberTo.equals(clientDTOList.get(i).getAccountNumber())) { // 받는 사람 잔액, 거래 내역 처리
+                long balance = clientDTOList.get(i).getBalance();
+                balance = balance + money;
+                clientDTOList.get(i).setBalance(balance);
+                AccountDTO accountDTO = new AccountDTO(accountNumberTo, money, 0);
+                accountDTOList.add(accountDTO);
             }
         }
-        return result;
     }
-
 }
-
-
-
-
-
-
-

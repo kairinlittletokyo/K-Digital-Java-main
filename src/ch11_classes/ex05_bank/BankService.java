@@ -4,186 +4,161 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BankService {
-    private Scanner scanner = new Scanner(System.in);
-    private BankRepository bankRepository = new BankRepository();
+    BankRepository bankRepository = new BankRepository();
+    Scanner scanner = new Scanner(System.in);
 
-
+    //레포짓과 스캐너 미리 선언
     public void save() {
-        System.out.print("가입자 이름: ");
-        String clientName = scanner.next();
-
-        // 중복 체크 확인 변수
-        boolean isDuplicate;
-        String accountNumber;
-
+        String accountNumber = null;
+        ClientDTO clientDTO = null;
         do {
-            System.out.print("희망하는 계좌번호: ");
+            System.out.print("계좌번호: ");
             accountNumber = scanner.next();
+            clientDTO = bankRepository.accountCheck(accountNumber);
+            if (clientDTO == null) {
+                System.out.println("사용 가능한 계좌번호 입니다.");
+            } else {
+                System.out.println("이미 사용 중인 계좌번호 입니다.");
+            } //일치하는 게 있으면 계속 입력 받는 형식
+        } while (clientDTO != null);
+        //clinetDTO가 null 이 아니면 계속 이라는 뜻
 
-            // 계좌번호 중복 체크
-            isDuplicate = bankRepository.NumberDuplicate(accountNumber);
 
-            if (isDuplicate) {
-                System.out.println("이미 사용 중인 계좌번호입니다. 다시 입력해주세요.");
-            }
-
-        } while (isDuplicate);
-
-        System.out.print("계좌 비밀번호: ");
+        System.out.print("비밀번호: ");
         String clientPass = scanner.next();
-
-        // 가입일자 자동 저장
-        String clientCreatedAt = BankUtil.getCurrentDate();
-
-        // ClientDTO 객체 생성
-        ClientDTO clientDTO = new ClientDTO(clientName, accountNumber, clientPass, clientCreatedAt);
-
-        // 저장
-        boolean result = bankRepository.save(clientDTO);
-
+        System.out.print("이름: ");
+        String clientName = scanner.next();
+        ClientDTO newClient = new ClientDTO(clientName, accountNumber, clientPass);
+        boolean result = bankRepository.save(newClient);
         if (result) {
-            System.out.println("계좌가 성공적으로 등록되었습니다.");
+            System.out.println("고객등록 성공");
         } else {
-            System.out.println("계좌 등록에 실패하였습니다.");
+            System.out.println("고객등록 실패");
         }
     }
 
     public void checkBalance() {
-        System.out.print("계좌번호 입력: ");
+        System.out.print("계좌번호: ");
         String accountNumber = scanner.next();
-        ClientDTO clientDTO = bankRepository.searchAccountNumber(accountNumber);
-
-        if (clientDTO != null) {
-            System.out.println("잔액: " + clientDTO.getBalance());
-        } else {
-            System.out.println("없는 계좌번호입니다.");
+        ClientDTO clientDTO = bankRepository.checkBalance(accountNumber);
+        if (clientDTO != null) { //널이 아니면 일치하는 계좌를 찾았다는 것
+            System.out.println(clientDTO.getClientName() + "님의 잔액은 " + clientDTO.getBalance() + "원 입니다.");
+        } else { //clinetDTO에 저장된 고객 정보 가져오기
+            System.out.println("없는 계좌번호 입니다!");
         }
     }
 
     public void deposit() {
-        System.out.print("계좌번호 입력: ");
+        System.out.print("계좌번호: ");
         String accountNumber = scanner.next();
-        ClientDTO clientDTO = bankRepository.searchAccountNumber(accountNumber);
-
+        System.out.print("입금액: ");
+        long money = scanner.nextLong();
+        ClientDTO clientDTO = bankRepository.accountCheck(accountNumber);
         if (clientDTO != null) {
-            System.out.print("입금액 입력: ");
-            long depositAmount = scanner.nextLong();
-
-            if (depositAmount > 0) {
-                clientDTO.setBalance(clientDTO.getBalance() + depositAmount);
-                System.out.println(depositAmount + "원이 입금되었습니다.");
-
-                // 입금 내역 기록
-                AccountDTO depositDTO = new AccountDTO(accountNumber, depositAmount, 0, BankUtil.getCurrentDate());
-                bankRepository.bankHistory(depositDTO);
-
+            boolean result = bankRepository.deposit(accountNumber, money);
+            if (result) {
+                System.out.println("입금 완료");
             } else {
-                System.out.println("입금액은 0원보다 커야 합니다.");
+                System.out.println("입금 실패");
             }
         } else {
-            System.out.println("없는 계좌번호입니다.");
+            System.out.println("해당 계좌가 없습니다.");
         }
     }
 
     public void withdraw() {
-        System.out.print("계좌번호 입력: ");
+        System.out.print("계좌번호: ");
         String accountNumber = scanner.next();
-        System.out.print("비밀번호 입력: ");
+        System.out.print("비밀번호: ");
         String clientPass = scanner.next();
-        System.out.print("출금액 입력: ");
-        long withdrawAmount = scanner.nextLong();
-
-        ClientDTO clientDTO = bankRepository.searchAccountNumber(accountNumber);
-
-        if (clientDTO == null) {
-            System.out.println("계좌번호가 틀렸습니다.");
-            return;
-        }
-
-        if (!clientDTO.getClientPass().equals(clientPass)) {
-            System.out.println("비밀번호가 틀렸습니다.");
-            return;
-        }
-
-        if (withdrawAmount > clientDTO.getBalance()) {
-            System.out.println("잔액이 부족합니다.");
-            return;
-        }
-
-        boolean result = bankRepository.withdraw(accountNumber, clientPass, withdrawAmount);
-
-        if (result) {
-            System.out.println(withdrawAmount + "원이 출금되었습니다.");
-        } else {
-            System.out.println("출금 실패. 계좌번호, 비밀번호, 출금액을 확인하세요.");
-        }
-    }
-
-
-    public void BankingHistory() {
-        System.out.print("계좌번호 입력: ");
-        String accountNumber = scanner.next();
-        ClientDTO clientDTO = bankRepository.searchAccountNumber(accountNumber);
-
-        if (clientDTO == null) {
-            System.out.println("계좌번호가 틀렸습니다.");
-            return;
-        }
-
-    }
-
-    public void showHistory() {
-
-            System.out.print("계좌번호 입력: ");
-            String accountNumber = scanner.next();
-            ClientDTO clientDTO = bankRepository.searchAccountNumber(accountNumber);
-
-            if (clientDTO == null) {
-                System.out.println("계좌번호가 틀렸습니다.");
-                return;
-            }
-
-            while (true) {
-                System.out.println("1.전체내역 | 2.입금내역 | 3.출금내역 | 4.종료");
-                System.out.print("메뉴 선택: ");
-                int menuChoice = scanner.nextInt();
-
-                if (menuChoice == 1) {
-                    showAllHistory(accountNumber);
-                } else if (menuChoice == 2) {
-                    showDepositHistory(accountNumber);
-                } else if (menuChoice == 3) {
-                    showWithdrawHistory(accountNumber);
-                } else if (menuChoice == 4) {
-                    break;
-                } else {
-                    System.out.println("잘못된 메뉴 선택입니다. 다시 입력해주세요.");
-                }
-            }
-        }
-
-        private void showAllHistory(String accountNumber) {
-            List<AccountDTO> allHistory = bankRepository.getAllHistory(accountNumber);
-            printHistory(allHistory);
-        }
-
-        private void showDepositHistory(String accountNumber) {
-            List<AccountDTO> depositHistory = bankRepository.getDepositHistory(accountNumber);
-            printHistory(depositHistory);
-        }
-
-        private void showWithdrawHistory(String accountNumber) {
-            List<AccountDTO> withdrawHistory = bankRepository.getWithdrawHistory(accountNumber);
-            printHistory(withdrawHistory);
-        }
-
-        private void printHistory(List<AccountDTO> historyList) {
-            if (historyList.isEmpty()) {
-                System.out.println("내역이 없습니다.");
+        System.out.print("출금액: ");
+        long money = scanner.nextLong();
+        ClientDTO clientDTO = bankRepository.accountCheck(accountNumber);
+        if (clientDTO != null && clientPass.equals(clientDTO.getClientPass())) {
+            boolean result = bankRepository.withdraw(accountNumber, money);
+            if (result) {
+                System.out.println("출금 완료");
             } else {
-                for (AccountDTO history : historyList) {
-                    System.out.println(history);
-                }
+                System.out.println("잔액이 부족합니다");
             }
+        } else {
+            System.out.println("해당 계좌가 없거나 비밀번호가 틀립니다!");
         }
     }
+
+    public void bankingList() {
+        boolean run = true;
+        System.out.print("계좌번호: ");
+        String accountNumber = scanner.next();
+        int selectNo = 0;
+        ClientDTO clientDTO = bankRepository.accountCheck(accountNumber);
+        if (clientDTO != null) {
+            while (run) {
+                System.out.println("-----------------------------------------------------------------------");
+                System.out.println("1.모든 내역 | 2.입금 내역 | 3.출금 내역 | 4.종료 ");
+                System.out.println("-----------------------------------------------------------------------");
+                System.out.print("선택> ");
+                selectNo = scanner.nextInt();
+                List<AccountDTO> accountDTOList = bankRepository.bankingList(accountNumber); // 입력한 계좌번호에 해당하는 거래내역만
+                if (accountDTOList.size() > 0) {
+                    if (selectNo == 1) {
+                        for (AccountDTO accountDTO : accountDTOList) {
+                            System.out.println("accountDTO = " + accountDTO);
+                        }
+                    } else if (selectNo == 2) {
+                        for (AccountDTO accountDTO : accountDTOList) {
+                            if (accountDTO.getDeposit() > 0) {
+                                System.out.println("accountDTO = " + accountDTO);
+                            }
+                        }
+                    } else if (selectNo == 3) {
+                        for (AccountDTO accountDTO : accountDTOList) {
+                            if (accountDTO.getWithdraw() > 0) {
+                                System.out.println("accountDTO = " + accountDTO);
+                            }
+                        }
+                    } else if (selectNo == 4) {
+                        run = false;
+                    }
+                } else {
+                    System.out.println("거래내역이 없습니다!");
+                }
+            }
+        } else {
+            System.out.println("해당 계좌가 없습니다!");
+        }
+    }
+
+    public void transfer() {
+        System.out.print("보내실 분 계좌번호: ");
+        String accountNumberFrom = scanner.next();
+        System.out.print("받으실 분 계좌번호: ");
+        String accountNumberTo = scanner.next();
+        System.out.print("보낼 금액: ");
+        long money = scanner.nextLong();
+        ClientDTO clientTo = bankRepository.accountCheck(accountNumberTo); // 받는 사람의 고객 정보
+        ClientDTO clientFrom = bankRepository.accountCheck(accountNumberFrom); // 보내는 사람의 고객 정보 객체를 가져옴
+        if (clientTo != null && clientFrom !=null) { // 둘 중 하나라도 아니면 이체가 되어선 안된다.
+            System.out.println("받으실 분이 " + clientTo.getClientName() + "님이 맞습니까?");
+            System.out.println("맞으면 1번, 틀리면 2번을 입력해주세요.");
+            System.out.print("입력> ");
+            int selectNo = scanner.nextInt();
+            if (selectNo == 1) {
+                System.out.print("비밀번호를 입력해주세요: ");
+                String clientPass = scanner.next();
+                if (clientPass.equals(clientFrom.getClientPass()) && money <= clientFrom.getBalance()) {
+                    bankRepository.transfer(accountNumberFrom, accountNumberTo, money);
+                    System.out.println("이체가 완료되었습니다. ");
+                } else if (!clientPass.equals(clientFrom.getClientPass())) {
+                    System.out.println("비밀번호가 틀립니다!");
+                } else if (money > clientFrom.getBalance()) {
+                    System.out.println("잔액이 부족합니다!");
+                }
+            } else if (selectNo == 2) {
+                System.out.println("메인메뉴로 돌아갑니다.");
+            }
+        } else {
+            System.out.println("해당 계좌가 없습니다.");
+        }
+    }
+}

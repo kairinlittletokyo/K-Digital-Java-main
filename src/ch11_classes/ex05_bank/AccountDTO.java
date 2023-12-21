@@ -1,10 +1,13 @@
 package ch11_classes.ex05_bank;
 
-public class AccountDTO {
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class AccountDTO { //입출금 내역 기록 DTO
     private Long id;
-    private String accountNumber;
-    private long deposit;
-    private long withdraw;
+    private String accountNumber; //어떤 계좌에서 입출금이 발생했는지 번호
+    private long deposit; //입금
+    private long withdraw; //출금
     private String bankingAt;
 
     public Long getId() {
@@ -47,13 +50,19 @@ public class AccountDTO {
         this.bankingAt = bankingAt;
     }
 
-    public AccountDTO(String accountNumber, long deposit, long withdraw, String bankingAt) {
-        this.id = null; // 아직 id가 할당되지 않았으므로 null로 초기화
+    private static Long idValue = 1L;
+
+    public AccountDTO() {
+    }
+
+    public AccountDTO(String accountNumber, long deposit, long withdraw) {
+        this.id = idValue++; //id는 자동
         this.accountNumber = accountNumber;
         this.deposit = deposit;
         this.withdraw = withdraw;
-        this.bankingAt = bankingAt;
+        this.bankingAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
+    //필드에 저장하고 거래시간 기록
 
     @Override
     public String toString() {
@@ -65,6 +74,4 @@ public class AccountDTO {
                 ", bankingAt='" + bankingAt + '\'' +
                 '}';
     }
-
-
 }
