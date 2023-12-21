@@ -1,7 +1,5 @@
 package ch11_classes.ex04_board;
 
-import ch11_classes.ex03_member.MemberService;
-
 import java.util.Scanner;
 
 public class BoardMain {
@@ -13,7 +11,7 @@ public class BoardMain {
 
         while (run) {
             System.out.println("-----------------------------------------------------------------------------------------");
-            System.out.println("        1.글 작성 | 2.글 목록 | 3.글 조회 | 4.글 수정 | 5.글 삭제 | 6.검색 | 0.종료");
+            System.out.println("1.글작성 | 2.글목록 | 3.글조회 | 4.글수정 | 5.글삭제 | 6.검색 | 7.테스트데이터 | 0.종료");
             System.out.println("-----------------------------------------------------------------------------------------");
             System.out.print("선택> ");
             selectNo = scan.nextInt();
@@ -28,12 +26,12 @@ public class BoardMain {
             } else if (selectNo == 5) {
                 boardService.delete();
             } else if (selectNo == 6) {
-                boardService.findByTitle();
+                boardService.search();
+            } else if (selectNo == 7) {
+                boardService.testData();
             } else if (selectNo == 0) {
-                System.out.println("종료합니다.");
                 run = false;
             }
         }
     }
 }
-

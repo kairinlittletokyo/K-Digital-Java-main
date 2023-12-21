@@ -1,16 +1,31 @@
-package ch11_classes.ex04_board;
+
+package ch11_classes.ex06_memberboard.dto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 public class BoardDTO {
+
     private Long id;
     private String boardTitle;
     private String boardWriter;
-    private String boardPass;
     private String boardContents;
-    private int boardHits = 0;
+    private int boardHits;
     private String createdAt;
+
+    public BoardDTO() {
+
+    }
+
+    private static Long idValue = 1L;
+    public BoardDTO (String boardTitle, String boardWriter, String boardContents){
+        this.id = idValue++;
+        this.boardTitle = boardTitle;
+        this.boardWriter = boardWriter;
+        this.boardContents = boardContents;
+        this.boardHits = 0;
+        this.createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+    }
 
     public Long getId() {
         return id;
@@ -34,14 +49,6 @@ public class BoardDTO {
 
     public void setBoardWriter(String boardWriter) {
         this.boardWriter = boardWriter;
-    }
-
-    public String getBoardPass() {
-        return boardPass;
-    }
-
-    public void setBoardPass(String boardPass) {
-        this.boardPass = boardPass;
     }
 
     public String getBoardContents() {
@@ -68,32 +75,16 @@ public class BoardDTO {
         this.createdAt = createdAt;
     }
 
-    public BoardDTO() {
-
-    }
-
-    private static Long idValue = 1L;
-
-    public BoardDTO(String boardTitle, String boardWriter, String boardPass, String boardContents) {
-        this.id = idValue++;
-        this.boardTitle = boardTitle;
-        this.boardWriter = boardWriter;
-        this.boardPass = boardPass;
-        this.boardContents = boardContents;
-        this.boardHits = 0;
-        this.createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
     @Override
     public String toString() {
         return "BoardDTO{" +
                 "id=" + id +
                 ", boardTitle='" + boardTitle + '\'' +
                 ", boardWriter='" + boardWriter + '\'' +
-                ", boardPass='" + boardPass + '\'' +
                 ", boardContents='" + boardContents + '\'' +
                 ", boardHits=" + boardHits +
                 ", createdAt='" + createdAt + '\'' +
                 '}';
     }
 }
+
