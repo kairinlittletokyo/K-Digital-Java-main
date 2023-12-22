@@ -3,7 +3,11 @@ package ch11_classes.ex06_memberboard.dto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
 public class BoardDTO {
+    private List<CommentDTO> comments = new ArrayList<>();
 
     private Long id;
     private String boardTitle;
@@ -12,8 +16,20 @@ public class BoardDTO {
     private int boardHits;
     private String createdAt;
 
-    public BoardDTO() {
+    public BoardDTO(String boardTitle, String boardWriter, String boardPass, String boardContents) {
 
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(CommentDTO comment) {
+        comments.add(comment);
     }
 
     private static Long idValue = 1L;
